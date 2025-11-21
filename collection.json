@@ -1,0 +1,295 @@
+{
+  "info": {
+    "_postman_id": "betahouse-local-collection-2025",
+    "name": "BetaHouse Localhost Cloudinary Upload",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000/api"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+
+  "item": [
+    {
+      "name": "Auth - Signup (Cosmas)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{base_url}}/auth/signup",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Cosmas\",\n  \"email\": \"cosmas@example.com\",\n  \"password\": \"Password123\"\n}"
+        }
+      }
+    },
+
+    {
+      "name": "Auth - Signin (Cosmas)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{base_url}}/auth/signin",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"cosmas@example.com\",\n  \"password\": \"Password123\"\n}"
+        }
+      }
+    },
+
+    {
+      "name": "Property 1 - Real House Luxury Villa (Victoria Island)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+        ],
+        "url": "{{base_url}}/properties",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "title", "value": "Real House Luxury Villa" },
+            { "key": "description", "value": "Luxury villa located in Victoria Island, Lagos." },
+            { "key": "price", "value": "3340000000" },
+            { "key": "currency", "value": "NGN" },
+            { "key": "rent", "value": "false" },
+            { "key": "featured", "value": "true" },
+            { "key": "status", "value": "sale" },
+            { "key": "location[city]", "value": "Lagos" },
+            { "key": "location[area]", "value": "Victoria Island" },
+            { "key": "bedrooms", "value": "6" },
+            { "key": "bathrooms", "value": "3" },
+            { "key": "type", "value": "villa" },
+            { "key": "images", "type": "file", "src": "" }
+          ]
+        }
+      }
+    },
+
+    {
+      "name": "Property 2 - Exquisite Haven Villa (Festac)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base_url}}/properties",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "title", "value": "Exquisite Haven Villa" },
+            { "key": "description", "value": "Beautiful villa in Festac, Lagos." },
+            { "key": "price", "value": "4000000" },
+            { "key": "currency", "value": "NGN" },
+            { "key": "rent", "value": "true" },
+            { "key": "featured", "value": "true" },
+            { "key": "status", "value": "rent" },
+            { "key": "location[city]", "value": "Lagos" },
+            { "key": "location[area]", "value": "Festac" },
+            { "key": "bedrooms", "value": "5" },
+            { "key": "bathrooms", "value": "3" },
+            { "key": "type", "value": "villa" },
+            { "key": "images", "type": "file", "src": "" }
+          ]
+        }
+      }
+    },
+
+    {
+      "name": "Property 3 - Luxe Palatial Villa (Gbagada)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base_url}}/properties",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "title", "value": "Luxe Palatial Villa" },
+            { "key": "description", "value": "Modern palatial villa in Gbagada." },
+            { "key": "price", "value": "5350000000" },
+            { "key": "currency", "value": "NGN" },
+            { "key": "rent", "value": "false" },
+            { "key": "featured", "value": "true" },
+            { "key": "status", "value": "sale" },
+            { "key": "location[city]", "value": "Lagos" },
+            { "key": "location[area]", "value": "Gbagada" },
+            { "key": "bedrooms", "value": "7" },
+            { "key": "bathrooms", "value": "3" },
+            { "key": "type", "value": "villa" },
+            { "key": "images", "type": "file", "src": "" }
+          ]
+        }
+      }
+    },
+
+    {
+      "name": "Property 4 - Harmony Luxury Villa (Mushin)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base_url}}/properties",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "title", "value": "Harmony Luxury Villa" },
+            { "key": "description", "value": "Comfortable rental villa in Mushin." },
+            { "key": "price", "value": "4000000" },
+            { "key": "currency", "value": "NGN" },
+            { "key": "rent", "value": "true" },
+            { "key": "featured", "value": "true" },
+            { "key": "status", "value": "rent" },
+            { "key": "location[city]", "value": "Lagos" },
+            { "key": "location[area]", "value": "Mushin" },
+            { "key": "bedrooms", "value": "4" },
+            { "key": "bathrooms", "value": "3" },
+            { "key": "type", "value": "villa" },
+            { "key": "images", "type": "file", "src": "" }
+          ]
+        }
+      }
+    },
+
+    {
+      "name": "Property 5 - Real House Luxury Villa (VI Second)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base_url}}/properties",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "title", "value": "Real House Luxury Villa" },
+            { "key": "description", "value": "Large luxury villa in VI." },
+            { "key": "price", "value": "350000000" },
+            { "key": "currency", "value": "NGN" },
+            { "key": "rent", "value": "false" },
+            { "key": "featured", "value": "true" },
+            { "key": "status", "value": "sale" },
+            { "key": "location[city]", "value": "Lagos" },
+            { "key": "location[area]", "value": "Victoria Island" },
+            { "key": "bedrooms", "value": "6" },
+            { "key": "bathrooms", "value": "4" },
+            { "key": "type", "value": "villa" },
+            { "key": "images", "type": "file", "src": "" }
+          ]
+        }
+      }
+    },
+
+    {
+      "name": "Property 6 - Real House Luxury Villa (Lekki-Ajah)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base_url}}/properties",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "title", "value": "Real House Luxury Villa" },
+            { "key": "description", "value": "Nice villa in Lekki-Ajah." },
+            { "key": "price", "value": "4200000" },
+            { "key": "currency", "value": "NGN" },
+            { "key": "rent", "value": "true" },
+            { "key": "featured", "value": "true" },
+            { "key": "status", "value": "rent" },
+            { "key": "location[city]", "value": "Lagos" },
+            { "key": "location[area]", "value": "Lekki-Ajah" },
+            { "key": "bedrooms", "value": "5" },
+            { "key": "bathrooms", "value": "3" },
+            { "key": "type", "value": "villa" },
+            { "key": "images", "type": "file", "src": "" }
+          ]
+        }
+      }
+    },
+
+    {
+      "name": "Property 7 - Infinite Bliss Villa (Enugu)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base_url}}/properties",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "title", "value": "Infinite Bliss Villa" },
+            { "key": "description", "value": "Luxury villa in Enugu." },
+            { "key": "price", "value": "2350000000" },
+            { "key": "currency", "value": "NGN" },
+            { "key": "rent", "value": "false" },
+            { "key": "featured", "value": "false" },
+            { "key": "status", "value": "sale" },
+            { "key": "location[city]", "value": "Enugu" },
+            { "key": "location[area]", "value": "Ishagu" },
+            { "key": "bedrooms", "value": "5" },
+            { "key": "bathrooms", "value": "3" },
+            { "key": "type", "value": "villa" },
+            { "key": "images", "type": "file", "src": "" }
+          ]
+        }
+      }
+    },
+
+    {
+      "name": "Property 8 - Real House Luxury Villa (Owerri)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base_url}}/properties",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "title", "value": "Real House Luxury Villa" },
+            { "key": "description", "value": "Large villa in Owerri." },
+            { "key": "price", "value": "3350000000" },
+            { "key": "currency", "value": "NGN" },
+            { "key": "rent", "value": "true" },
+            { "key": "featured", "value": "false" },
+            { "key": "status", "value": "rent" },
+            { "key": "location[city]", "value": "Owerri" },
+            { "key": "location[area]", "value": "Works Layout" },
+            { "key": "bedrooms", "value": "8" },
+            { "key": "bathrooms", "value": "6" },
+            { "key": "type", "value": "villa" },
+            { "key": "images", "type": "file", "src": "" }
+          ]
+        }
+      }
+    },
+
+    {
+      "name": "Property 9 - Real House Luxury Villa (Ikeja)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base_url}}/properties",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "title", "value": "Real House Luxury Villa" },
+            { "key": "description", "value": "Luxury villa in Ikeja, Lagos." },
+            { "key": "price", "value": "600000000" },
+            { "key": "currency", "value": "NGN" },
+            { "key": "rent", "value": "false" },
+            { "key": "featured", "value": "false" },
+            { "key": "status", "value": "sale" },
+            { "key": "location[city]", "value": "Lagos" },
+            { "key": "location[area]", "value": "Ikeja" },
+            { "key": "bedrooms", "value": "6" },
+            { "key": "bathrooms", "value": "6" },
+            { "key": "type", "value": "villa" },
+            { "key": "images", "type": "file", "src": "" }
+          ]
+        }
+      }
+    }
+  ]
+}
