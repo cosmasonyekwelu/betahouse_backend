@@ -1,0 +1,90 @@
+# ───────────────────────────────
+#  NODE & REACT GENERAL
+# ───────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ───────────────────────────────
+#  ENVIRONMENT FILES
+# ───────────────────────────────
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Backend env files
+backend/.env
+backend/.env.local
+backend/.env.*.local
+
+# ───────────────────────────────
+#  REACT BUILD / DIST FILES
+# ───────────────────────────────
+build/
+dist/
+*.tar.gz
+
+# ───────────────────────────────
+#  CACHE FILES
+# ───────────────────────────────
+/.cache/
+.cache-loader/
+.vite/
+.vitepress/
+pnpm-lock.yaml
+package-lock.json
+
+# ───────────────────────────────
+#  OS & EDITOR FILES
+# ───────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ───────────────────────────────
+#  LOG FILES
+# ───────────────────────────────
+logs/
+*.log
+*.log.*
+npm-debug.log*
+debug.log
+
+# ───────────────────────────────
+#  BACKEND COVERAGE & TEMP
+# ───────────────────────────────
+coverage/
+tmp/
+temp/
+
+# ───────────────────────────────
+#  POSTMAN & API FILES
+# ───────────────────────────────
+postman_collection.json
+postman_environment.json
+
+
+# ----------------------------------------------------------------------------
+# GIT MERGE/REBASE TEMP FILES
+# ----------------------------------------------------------------------------
+*.orig
+*.rej
+
+# ───────────────────────────────
+#  TYPESCRIPT
+# ───────────────────────────────
+*.tsbuildinfo
+
+# ───────────────────────────────
+#  MONGOOSE / SQLITE / DB FILES
+# ───────────────────────────────
+*.sqlite
+*.db
+*.db-shm
+*.db-wal
