@@ -1,13 +1,37 @@
-exports.notFound = (req,res,next) => {
-  res.status(404).json({ message: 'Route not found' });
+// 404 Handler — Route Not Found
+exports.notFound = (req, res, next) => {
+  res.status(404);
+
+  return res.json({
+    success: false,
+    message: `Route ${req.originalUrl} not found`,
+  });
 };
 
+
+
 exports.errorHandler = (err, req, res, next) => {
-  console.error(err);
-  const status = err.status || 500;
-  const message = err.message || 'Internal Server Error';
-  // send stack trace only in development
-  const payload = { message };
-  if(process.env.NODE_ENV !== 'production') payload.stack = err.stack;
-  res.status(status).json(payload);
+ 
+  if (res.headersSent) {
+    return next(err);
+  }
+
+ 
+  console.error("SERVER ERROR:", err);
+
+
+  const statusCode = err.statusCode || err.status || 500;
+
+
+  const response = {
+    success: false,
+    message: err.message || "Internal Server Error",
+  };
+
+
+  if (process.env.NODE_ENV !== "production") {
+    response.stack = err.stack;
+  }
+
+  return res.status(statusCode).json(response);
 };
