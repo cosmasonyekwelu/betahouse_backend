@@ -11,7 +11,7 @@ exports.me = async (req,res,next) => {
 exports.updateMe = async (req,res,next) => {
   try {
     const updates = req.body;
-    // don't allow password updates here; separate endpoint would handle password changes
+
     delete updates.password;
     const user = await User.findByIdAndUpdate(req.userId, updates, { new: true }).select('-passwordHash');
     res.json({ user });

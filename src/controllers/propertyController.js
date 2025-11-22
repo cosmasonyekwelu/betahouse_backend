@@ -2,9 +2,7 @@ const { validationResult } = require("express-validator");
 const Property = require("../models/Property");
 const mongoose = require("mongoose");
 
-/* -----------------------------------------------------
-   BUILD FILTERS FOR SEARCH / FILTER / LIST
------------------------------------------------------ */
+
 function buildFilters(q) {
   const f = {};
 
@@ -27,9 +25,7 @@ function buildFilters(q) {
   return f;
 }
 
-/* -----------------------------------------------------
-   GET LIST OF PROPERTIES
------------------------------------------------------ */
+
 exports.list = async (req, res, next) => {
   try {
     const page = Math.max(1, parseInt(req.query.page || "1"));
@@ -63,9 +59,7 @@ exports.list = async (req, res, next) => {
   }
 };
 
-/* -----------------------------------------------------
-   GET PROPERTY BY ID
------------------------------------------------------ */
+
 exports.getById = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -83,18 +77,16 @@ exports.getById = async (req, res, next) => {
   }
 };
 
-/* -----------------------------------------------------
-   PARSE PROPERTY BODY FIELDS
------------------------------------------------------ */
+
 function normalizePropertyData(body) {
   const data = { ...body };
 
-  // Convert price, bedrooms, bathrooms
+
   if (data.price) data.price = Number(data.price);
   if (data.bedrooms) data.bedrooms = Number(data.bedrooms);
   if (data.bathrooms) data.bathrooms = Number(data.bathrooms);
 
-  // Convert booleans
+
   if (data.featured !== undefined) {
     data.featured = data.featured === "true" || data.featured === true;
   }
@@ -102,19 +94,16 @@ function normalizePropertyData(body) {
   return data;
 }
 
-/* -----------------------------------------------------
-   CREATE PROPERTY (Cloudinary Images)
------------------------------------------------------ */
 exports.create = async (req, res, next) => {
   try {
-    // Validate request
+
     const errors = validationResult(req);
     if (!errors.isEmpty())
       return res.status(400).json({ errors: errors.array() });
 
     const data = normalizePropertyData(req.body);
 
-    // Required fields check
+
     if (!data.type)
       return res.status(400).json({ message: "Property type is required" });
     if (!data.bedrooms)
@@ -122,7 +111,7 @@ exports.create = async (req, res, next) => {
     if (!data.bathrooms)
       return res.status(400).json({ message: "Bathrooms is required" });
 
-    // Cloudinary image URLs
+
     if (req.files && req.files.length > 0) {
       data.images = req.files.map((f) => f.path);
     }
@@ -137,9 +126,7 @@ exports.create = async (req, res, next) => {
   }
 };
 
-/* -----------------------------------------------------
-   UPDATE PROPERTY
------------------------------------------------------ */
+
 exports.update = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -166,9 +153,7 @@ exports.update = async (req, res, next) => {
   }
 };
 
-/* -----------------------------------------------------
-   DELETE PROPERTY
------------------------------------------------------ */
+
 exports.remove = async (req, res, next) => {
   try {
     const id = req.params.id;

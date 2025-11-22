@@ -18,7 +18,7 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
       logger.info(`Server running on port ${PORT}`);
     });
 
-    // Graceful shutdown
+
     const shutdown = () => {
       logger.info('Shutting down server...');
       server.close(() => {

@@ -4,19 +4,19 @@ const router = express.Router();
 
 const propertyController = require('../controllers/propertyController');
 const { authMiddleware } = require('../middlewares/auth');
-const uploadCloud = require('../middlewares/cloudinaryUpload');  // <-- NEW
+const uploadCloud = require('../middlewares/cloudinaryUpload');  
 
-// list
+
 router.get('/', propertyController.list);
 
-// get one
+
 router.get('/:id', propertyController.getById);
 
-// create
+
 router.post(
   '/',
   authMiddleware,
-  uploadCloud.array("images", 8),  // <-- now uploads to Cloudinary
+  uploadCloud.array("images", 8),  
   [
     body("title").isLength({ min: 3 }).withMessage("Title is required"),
     body("price").isNumeric().withMessage("Price must be a number")
@@ -24,7 +24,7 @@ router.post(
   propertyController.create
 );
 
-// update
+
 router.put(
   '/:id',
   authMiddleware,
@@ -32,7 +32,7 @@ router.put(
   propertyController.update
 );
 
-// delete
+
 router.delete('/:id', authMiddleware, propertyController.remove);
 
 module.exports = router;

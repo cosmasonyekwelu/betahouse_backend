@@ -35,7 +35,7 @@ const PropertySchema = new mongoose.Schema(
       default: ["https://placehold.co/600x400?text=No+Image"],
     },
 
-    /** ✅ NEWLY ADDED */
+
     featured: { type: Boolean, default: false, index: true },
 
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -44,7 +44,7 @@ const PropertySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Auto slug
+
 PropertySchema.pre("save", function (next) {
   if (this.isModified("title")) {
     this.slug = this.title
@@ -55,11 +55,11 @@ PropertySchema.pre("save", function (next) {
   next();
 });
 
-// Indexes
+
 PropertySchema.index({ title: "text", description: "text" });
 PropertySchema.index({ "location.city": 1 });
 PropertySchema.index({ price: 1 });
 PropertySchema.index({ bedrooms: 1 });
-PropertySchema.index({ featured: 1 }); // << Good for homepage queries
+PropertySchema.index({ featured: 1 });
 
 module.exports = mongoose.model("Property", PropertySchema);
