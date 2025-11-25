@@ -4,6 +4,7 @@ exports.search = async (req, res, next) => {
   try {
     const {
       q,
+      location,
       city,
       area,
       type,
@@ -18,38 +19,34 @@ exports.search = async (req, res, next) => {
 
     const filter = {};
 
-    // 🔍 Text Search
-    if (q) {
-      filter.$text = { $search: q };
+    if (q) filter.$text = { $search: q };
+
+    if (location) {
+      const regex = new RegExp(location, "i");
+      filter.$or = [
+        { "location.state": regex },
+        { "location.city": regex },
+        { "location.area": regex },
+        { "location.address": regex },
+      ];
     }
 
-    // 🔍 City
-    if (city) {
-      filter["location.city"] = { $regex: city, $options: "i" };
+    if (city) filter["location.city"] = new RegExp(city, "i");
+    if (area) filter["location.area"] = new RegExp(area, "i");
+    if (type) filter.type = new RegExp(type, "i");
+
+    if (bedrooms !== undefined && bedrooms !== "" && !isNaN(bedrooms)) {
+      filter.bedrooms = Number(bedrooms);
     }
 
-    // 🔍 Area
-    if (area) {
-      filter["location.area"] = { $regex: area, $options: "i" };
-    }
-
-    // 🔍 Type
-    if (type) filter.type = type;
-
-    // 🔍 Status
     if (status) filter.status = status;
 
-    // 🔍 Bedrooms
-    if (bedrooms) filter.bedrooms = { $gte: Number(bedrooms) };
-
-    // 🔍 Price Range
     if (minPrice || maxPrice) {
       filter.price = {};
       if (minPrice) filter.price.$gte = Number(minPrice);
       if (maxPrice) filter.price.$lte = Number(maxPrice);
     }
 
-    // Sorting
     const sortRule =
       sort === "price-asc"
         ? { price: 1 }
@@ -57,21 +54,24 @@ exports.search = async (req, res, next) => {
         ? { price: -1 }
         : { createdAt: -1 };
 
+    const limit = Number(pageSize);
+    const skip = (Number(page) - 1) * limit;
+
     const total = await Property.countDocuments(filter);
 
     const items = await Property.find(filter)
       .sort(sortRule)
-      .skip((page - 1) * pageSize)
-      .limit(Number(pageSize))
+      .skip(skip)
+      .limit(limit)
       .lean();
 
-    res.json({
+    return res.json({
       success: true,
       meta: {
         total,
         page: Number(page),
-        pageSize: Number(pageSize),
-        pages: Math.ceil(total / pageSize),
+        pageSize: limit,
+        pages: Math.ceil(total / limit),
       },
       items,
     });
