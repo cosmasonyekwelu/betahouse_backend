@@ -2,43 +2,73 @@ const { validationResult } = require("express-validator");
 const Property = require("../models/Property");
 const mongoose = require("mongoose");
 
-
+/* -----------------------------------------------------
+   BUILD QUERY FILTERS
+----------------------------------------------------- */
 function buildFilters(q) {
   const f = {};
 
+  // Full text search
   if (q.q) f.$text = { $search: q.q };
 
-  if (q.location) f["location.area"] = { $regex: q.location, $options: "i" };
-  if (q.city) f["location.city"] = { $regex: q.city, $options: "i" };
-  if (q.type) f.type = q.type;
-  if (q.status) f.status = q.status;
+  // Flexible LOCATION (matches ANY of the 4 location fields)
+  if (q.location) {
+    const regex = new RegExp(q.location, "i");
 
+    f.$or = [
+      { "location.state": regex },
+      { "location.city": regex },
+      { "location.area": regex },
+      { "location.address": regex },
+    ];
+  }
+
+  // TYPE filter
+  if (q.type) {
+    f.type = new RegExp(q.type, "i");
+  }
+
+  // BEDROOMS filter
+  if (q.bedrooms) {
+    f.bedrooms = { $gte: Number(q.bedrooms) };
+  }
+
+  // STATUS filter
+  if (q.status) {
+    f.status = q.status;
+  }
+
+  // PRICE RANGE
   if (q.minPrice || q.maxPrice) {
     f.price = {};
     if (q.minPrice) f.price.$gte = Number(q.minPrice);
     if (q.maxPrice) f.price.$lte = Number(q.maxPrice);
   }
 
-  if (q.bedrooms) f.bedrooms = { $gte: Number(q.bedrooms) };
-  if (q.featured) f.featured = q.featured === "true";
+  // FEATURED filter
+  if (q.featured) {
+    f.featured = q.featured === "true";
+  }
 
   return f;
 }
 
-
+/* -----------------------------------------------------
+   LIST PROPERTIES WITH FILTERS
+----------------------------------------------------- */
 exports.list = async (req, res, next) => {
   try {
     const page = Math.max(1, parseInt(req.query.page || "1"));
     const pageSize = Math.min(100, parseInt(req.query.pageSize || "9"));
-    const sortQuery = req.query.sort || "newest";
 
-    const sort =
-      sortQuery === "price-asc"
-        ? { price: 1 }
-        : sortQuery === "price-desc"
-        ? { price: -1 }
-        : { createdAt: -1 };
+    // Sorting rules
+    const sortQuery = req.query.sort;
+    let sort = { createdAt: -1 }; // default newest
 
+    if (sortQuery === "price-asc") sort = { price: 1 };
+    if (sortQuery === "price-desc") sort = { price: -1 };
+
+    // Build filters from query
     const filter = buildFilters(req.query);
 
     const total = await Property.countDocuments(filter);
@@ -51,7 +81,8 @@ exports.list = async (req, res, next) => {
       .lean();
 
     res.json({
-      meta: { total, page, pageSize, pages },
+      success: true,
+      meta: { total, page, pages, pageSize },
       items,
     });
   } catch (err) {
@@ -59,7 +90,9 @@ exports.list = async (req, res, next) => {
   }
 };
 
-
+/* -----------------------------------------------------
+   GET ONE PROPERTY
+----------------------------------------------------- */
 exports.getById = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -71,22 +104,24 @@ exports.getById = async (req, res, next) => {
     const prop = await Property.findById(id);
     if (!prop) return res.status(404).json({ message: "Property not found" });
 
-    res.json({ property: prop });
+    res.json({ success: true, property: prop });
   } catch (err) {
     next(err);
   }
 };
 
-
+/* -----------------------------------------------------
+   NORMALIZE PROPERTY INPUT DATA
+----------------------------------------------------- */
 function normalizePropertyData(body) {
   const data = { ...body };
 
-
+  // Convert numeric strings to numbers
   if (data.price) data.price = Number(data.price);
   if (data.bedrooms) data.bedrooms = Number(data.bedrooms);
   if (data.bathrooms) data.bathrooms = Number(data.bathrooms);
 
-
+  // Featured boolean
   if (data.featured !== undefined) {
     data.featured = data.featured === "true" || data.featured === true;
   }
@@ -94,16 +129,18 @@ function normalizePropertyData(body) {
   return data;
 }
 
+/* -----------------------------------------------------
+   CREATE PROPERTY
+----------------------------------------------------- */
 exports.create = async (req, res, next) => {
   try {
-
     const errors = validationResult(req);
     if (!errors.isEmpty())
       return res.status(400).json({ errors: errors.array() });
 
     const data = normalizePropertyData(req.body);
 
-
+    // Required fields validation
     if (!data.type)
       return res.status(400).json({ message: "Property type is required" });
     if (!data.bedrooms)
@@ -111,7 +148,7 @@ exports.create = async (req, res, next) => {
     if (!data.bathrooms)
       return res.status(400).json({ message: "Bathrooms is required" });
 
-
+    // Cloudinary images
     if (req.files && req.files.length > 0) {
       data.images = req.files.map((f) => f.path);
     }
@@ -126,7 +163,9 @@ exports.create = async (req, res, next) => {
   }
 };
 
-
+/* -----------------------------------------------------
+   UPDATE PROPERTY
+----------------------------------------------------- */
 exports.update = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -153,7 +192,9 @@ exports.update = async (req, res, next) => {
   }
 };
 
-
+/* -----------------------------------------------------
+   DELETE PROPERTY
+----------------------------------------------------- */
 exports.remove = async (req, res, next) => {
   try {
     const id = req.params.id;
